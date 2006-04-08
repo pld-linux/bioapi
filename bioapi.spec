@@ -64,13 +64,18 @@ Sample BioAPI QT application.
 %else
 	--with-Qt-dir=no \
 %endif
-	--with-x
+	--includedir=%{_includedir}/%{name}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT%{_includedir}/%{name}
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install include/bioapi_util.h include/installdefs.h imports/cdsa/v2_0/inc/cssmtype.h \
+        $RPM_BUILD_ROOT%{_includedir}/%{name}
 
 mv $RPM_BUILD_ROOT%{_bindir}/Sample $RPM_BUILD_ROOT%{_bindir}/BioAPI-Sample
 mv $RPM_BUILD_ROOT%{_bindir}/mds_install $RPM_BUILD_ROOT%{_bindir}/BioAPI-mds_install
@@ -102,7 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/*.h
+%{_includedir}/%{name}
 %{_libdir}/lib*.la
 # *.so needed in main package
 #%{?with_qt:%exclude %{_libdir}/libqtpwbsp.so.*}
