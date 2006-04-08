@@ -40,3 +40,15 @@ diff -urN bioapi-1.2.2.org/apps/Cmds/CdsaRec.cpp bioapi-1.2.2/apps/Cmds/CdsaRec.
  {
    m_outputAttributeData[CBioAPI_DeviceInfoType::IDX_MODULE_ID].Info		= s_BioApiAttrInfo_ModuleId;
    m_outputAttributeData[CBioAPI_DeviceInfoType::IDX_DEVICE_ID].Info		= s_BioApiAttrInfo_DeviceId;
+diff -urN bioapi-1.2.2.org/apps/Cmds/QDirectory.h bioapi-1.2.2/apps/Cmds/QDirectory.h
+--- bioapi-1.2.2.org/apps/Cmds/QDirectory.h	2005-06-13 08:22:00.000000000 +0200
++++ bioapi-1.2.2/apps/Cmds/QDirectory.h	2006-04-08 23:18:59.208255250 +0200
+@@ -16,7 +16,7 @@
+ public:
+ 
+   QString m_strDirName;
+-  QMDS *m_pMds;
++  class QMDS *m_pMds;
+   MDS_DB_HANDLE m_hDb;
+   
+   CSSM_RETURN Open( QMDS *pMds, const char *szDirName );
