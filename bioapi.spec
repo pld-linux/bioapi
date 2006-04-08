@@ -1,12 +1,11 @@
 # TODO:
-# - fix qt build on gcc 4.1
 # - change code to do not require *.so libs and use *.so.X.X.X
-%bcond_with qt
+%bcond_without	qt
 #
 Summary:	Framework for biometric-based authentication
 Name:		bioapi
 Version:	1.2.2
-Release:	0.1
+Release:	0.2
 License:	BSD
 Group:		Applications/Networking
 Source0:	http://www.qrivy.net/~michael/blua/bioapi/%{name}-%{version}.tar.bz2
@@ -81,6 +80,11 @@ mv $RPM_BUILD_ROOT%{_bindir}/Sample $RPM_BUILD_ROOT%{_bindir}/BioAPI-Sample
 mv $RPM_BUILD_ROOT%{_bindir}/mds_install $RPM_BUILD_ROOT%{_bindir}/BioAPI-mds_install
 mv $RPM_BUILD_ROOT%{_bindir}/mod_install $RPM_BUILD_ROOT%{_bindir}/BioAPI-mod_install
 
+%if %{with qt}
+mv $RPM_BUILD_ROOT%{_bindir}/MdsEdit $RPM_BUILD_ROOT%{_bindir}/BioAPI-MdsEdit
+mv $RPM_BUILD_ROOT%{_bindir}/QSample $RPM_BUILD_ROOT%{_bindir}/BioAPI-QSample
+%endif
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -101,7 +105,9 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc *.htm Disclaimer
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/BioAPI-Sample
+%attr(755,root,root) %{_bindir}/BioAPI-*_*
+%attr(755,root,root) %{_bindir}/BioAPITest
 %{?with_qt:%exclude %{_libdir}/libqtpwbsp.so*}
 %attr(755,root,root) %{_libdir}/lib*.so*
 
@@ -120,6 +126,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with qt}
 %files qt
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/*qt*
+%attr(755,root,root) %{_bindir}/BioAPI-MdsEdit
+%attr(755,root,root) %{_bindir}/BioAPI-QSample
 %attr(755,root,root) %{_libdir}/libqtpwbsp.so*
 %endif
