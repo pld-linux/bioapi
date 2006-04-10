@@ -1,8 +1,12 @@
 # TODO:
 # - change code to do not require *.so libs and use *.so.X.X.X
+# - create qt-devel (if necessary), kill -qt R: in -devel
+#
+# Conditional build:
 %bcond_without	qt
 #
 Summary:	Framework for biometric-based authentication
+Summary(pl):	Szkielet do uwierzytelniania opartego o biometrykê
 Name:		bioapi
 Version:	1.2.2
 Release:	0.2
@@ -28,29 +32,51 @@ reference implementation includes the Sample application and the
 MdsEdit utility from code provided by the International Biometric
 Group (IBG).
 
+%description -l pl
+Wzorcowa implementacja BioAPI dla platform uniksowych. Zosta³a
+stworzona przez Convergent Information Division (CISD), Information
+Technology Laboratory (ITL) z National Institute of Standards and
+Technology (NIST). Jest oparta bezpo¶rednio na wzorcowej implementacji
+BioAPI Consortium dla Windows oraz wzorcowej implementacji Common Data
+Security Architecture (CDSA). Uniksowa implementacja zawiera aplikacjê
+przyk³adow± i narzêdzie MdsEdit z kodu dostarczonego przez
+International Biometric Group (IBG).
+
 %package devel
-Summary:	Header files and development documentation for BioAPI
+Summary:	Header files for BioAPI
+Summary(pl):	Pliki nag³ówkowe BioAPI
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 %{?with_qt:Requires:	%{name}-qt = %{epoch}:%{version}-%{release}}
 
 %description devel
-Header files and development documentation for BioAPI.
+Header files for BioAPI.
+
+%description devel -l pl
+Pliki nag³ówkowe BioAPI.
 
 %package static
 Summary:	Static BioAPI libraries
+Summary(pl):	Statyczne biblioteki BioAPI
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 Static BioAPI libraries.
 
+%description static -l pl
+Statyczne biblioteki BioAPI.
+
 %package qt
-Summary:	Sample BioAPI QT application
-Group:		Applications
+Summary:	Sample BioAPI Qt application
+Summary(pl):	Przyk³adowa aplikacja BioAPI w Qt
+Group:		X11/Applications
 
 %description qt
 Sample BioAPI QT application.
+
+%description qt -l pl
+Przyk³adowa aplikacja BioAPI w Qt.
 
 %prep
 %setup -q
@@ -67,7 +93,6 @@ Sample BioAPI QT application.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 install -d $RPM_BUILD_ROOT%{_includedir}/%{name}
 
 %{__make} install \
