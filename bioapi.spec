@@ -1,15 +1,14 @@
 # TODO:
 # - change code to do not require *.so libs and use *.so.X.X.X
-# - create qt-devel (if necessary), kill -qt R: in -devel
 #
 # Conditional build:
-%bcond_without	qt
+%bcond_without	qt	# don't build qtpwbsp module
 #
 Summary:	Framework for biometric-based authentication
 Summary(pl):	Szkielet do uwierzytelniania opartego o biometrykê
 Name:		bioapi
 Version:	1.2.2
-Release:	0.2
+Release:	0.3
 License:	BSD
 Group:		Applications/Networking
 Source0:	http://www.qrivy.net/~michael/blua/bioapi/%{name}-%{version}.tar.bz2
@@ -19,6 +18,9 @@ URL:		http://www.qrivy.net/~michael/blua/
 %{?with_qt:BuildRequires:	qt-devel}
 BuildRequires:	xorg-lib-libX11-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# to get /var/lib/bioapi instead of /var/bioapi
+%define		_localstatedir	/var/lib
 
 %description
 BioAPI reference implementation for Unix-based platforms. The
@@ -93,7 +95,7 @@ Przyk³adowa aplikacja BioAPI w Qt.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_includedir}/%{name}
+install -d $RPM_BUILD_ROOT{%{_includedir}/%{name},/var/lib/bioapi}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -109,6 +111,9 @@ mv $RPM_BUILD_ROOT%{_bindir}/mod_install $RPM_BUILD_ROOT%{_bindir}/BioAPI-mod_in
 mv $RPM_BUILD_ROOT%{_bindir}/MdsEdit $RPM_BUILD_ROOT%{_bindir}/BioAPI-MdsEdit
 mv $RPM_BUILD_ROOT%{_bindir}/QSample $RPM_BUILD_ROOT%{_bindir}/BioAPI-QSample
 %endif
+
+# modules to dlopen
+rm -f $RPM_BUILD_ROOT%{_libdir}/lib{bioapi_dummy100,pwbsp,qtpwbsp}.{la,a}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -133,25 +138,37 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/BioAPI-Sample
 %attr(755,root,root) %{_bindir}/BioAPI-*_*
 %attr(755,root,root) %{_bindir}/BioAPITest
-%{?with_qt:%exclude %{_libdir}/libqtpwbsp.so*}
-%attr(755,root,root) %{_libdir}/lib*.so*
+%attr(755,root,root) %{_libdir}/libbioapi100.so.*.*.*
+%attr(755,root,root) %{_libdir}/libbioapi_dummy100.so.*.*.*
+%attr(755,root,root) %{_libdir}/libbioapi_mds300.so.*.*.*
+%attr(755,root,root) %{_libdir}/libmds_util.so.*.*.*
+%attr(755,root,root) %{_libdir}/libpwbsp.so.*.*.*
+%attr(755,root,root) %{_libdir}/libbioapi100.so
+%attr(755,root,root) %{_libdir}/libbioapi_dummy100.so
+%attr(755,root,root) %{_libdir}/libbioapi_mds300.so
+%attr(755,root,root) %{_libdir}/libmds_util.so
+%attr(755,root,root) %{_libdir}/libpwbsp.so
+%dir /var/lib/bioapi
 
 %files devel
 %defattr(644,root,root,755)
+# *.so needed in main package (maybe except libmds_util.so?)
+%{_libdir}/libbioapi100.la
+%{_libdir}/libbioapi_mds300.la
+%{_libdir}/libmds_util.la
 %{_includedir}/%{name}
-%{_libdir}/lib*.la
-# *.so needed in main package
-#%{?with_qt:%exclude %{_libdir}/libqtpwbsp.so.*}
-#%attr(755,root,root) %{_libdir}/lib*.so
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/*.a
+%{_libdir}/libbioapi100.a
+%{_libdir}/libbioapi_mds300.a
+%{_libdir}/libmds_util.a
 
 %if %{with qt}
 %files qt
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/BioAPI-MdsEdit
 %attr(755,root,root) %{_bindir}/BioAPI-QSample
-%attr(755,root,root) %{_libdir}/libqtpwbsp.so*
+%attr(755,root,root) %{_libdir}/libqtpwbsp.so.*.*.*
+%attr(755,root,root) %{_libdir}/libqtpwbsp.so
 %endif
