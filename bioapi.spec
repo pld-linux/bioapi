@@ -15,6 +15,7 @@ Source0:	http://www.qrivy.net/~michael/blua/bioapi/%{name}-%{version}.tar.bz2
 # Source0-md5:	924f723895c339552e501999945b7920
 Patch0:		%{name}-c++.patch
 URL:		http://www.qrivy.net/~michael/blua/
+BuildRequires:	libstdc++-devel
 %{?with_qt:BuildRequires:	qt-devel}
 BuildRequires:	xorg-lib-libX11-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -49,7 +50,7 @@ Summary:	Header files for BioAPI
 Summary(pl):	Pliki nag³ówkowe BioAPI
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-%{?with_qt:Requires:	%{name}-qt = %{epoch}:%{version}-%{release}}
+Requires:	libstdc++-devel
 
 %description devel
 Header files for BioAPI.
