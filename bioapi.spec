@@ -5,7 +5,7 @@
 %bcond_without	qt	# don't build qtpwbsp module
 #
 Summary:	Framework for biometric-based authentication
-Summary(pl):	Szkielet do uwierzytelniania opartego o biometrykê
+Summary(pl.UTF-8):   Szkielet do uwierzytelniania opartego o biometrykÄ™
 Name:		bioapi
 Version:	1.2.2
 Release:	0.3
@@ -35,19 +35,19 @@ reference implementation includes the Sample application and the
 MdsEdit utility from code provided by the International Biometric
 Group (IBG).
 
-%description -l pl
-Wzorcowa implementacja BioAPI dla platform uniksowych. Zosta³a
+%description -l pl.UTF-8
+Wzorcowa implementacja BioAPI dla platform uniksowych. ZostaÅ‚a
 stworzona przez Convergent Information Division (CISD), Information
 Technology Laboratory (ITL) z National Institute of Standards and
-Technology (NIST). Jest oparta bezpo¶rednio na wzorcowej implementacji
+Technology (NIST). Jest oparta bezpoÅ›rednio na wzorcowej implementacji
 BioAPI Consortium dla Windows oraz wzorcowej implementacji Common Data
-Security Architecture (CDSA). Uniksowa implementacja zawiera aplikacjê
-przyk³adow± i narzêdzie MdsEdit z kodu dostarczonego przez
+Security Architecture (CDSA). Uniksowa implementacja zawiera aplikacjÄ™
+przykÅ‚adowÄ… i narzÄ™dzie MdsEdit z kodu dostarczonego przez
 International Biometric Group (IBG).
 
 %package devel
 Summary:	Header files for BioAPI
-Summary(pl):	Pliki nag³ówkowe BioAPI
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe BioAPI
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	libstdc++-devel
@@ -55,31 +55,31 @@ Requires:	libstdc++-devel
 %description devel
 Header files for BioAPI.
 
-%description devel -l pl
-Pliki nag³ówkowe BioAPI.
+%description devel -l pl.UTF-8
+Pliki nagÅ‚Ã³wkowe BioAPI.
 
 %package static
 Summary:	Static BioAPI libraries
-Summary(pl):	Statyczne biblioteki BioAPI
+Summary(pl.UTF-8):   Statyczne biblioteki BioAPI
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 Static BioAPI libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczne biblioteki BioAPI.
 
 %package qt
 Summary:	Sample BioAPI Qt application
-Summary(pl):	Przyk³adowa aplikacja BioAPI w Qt
+Summary(pl.UTF-8):   PrzykÅ‚adowa aplikacja BioAPI w Qt
 Group:		X11/Applications
 
 %description qt
 Sample BioAPI QT application.
 
-%description qt -l pl
-Przyk³adowa aplikacja BioAPI w Qt.
+%description qt -l pl.UTF-8
+PrzykÅ‚adowa aplikacja BioAPI w Qt.
 
 %prep
 %setup -q
