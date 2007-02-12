@@ -5,7 +5,7 @@
 %bcond_without	qt	# don't build qtpwbsp module
 #
 Summary:	Framework for biometric-based authentication
-Summary(pl.UTF-8):   Szkielet do uwierzytelniania opartego o biometrykę
+Summary(pl.UTF-8):	Szkielet do uwierzytelniania opartego o biometrykę
 Name:		bioapi
 Version:	1.2.2
 Release:	0.3
@@ -47,7 +47,7 @@ International Biometric Group (IBG).
 
 %package devel
 Summary:	Header files for BioAPI
-Summary(pl.UTF-8):   Pliki nagłówkowe BioAPI
+Summary(pl.UTF-8):	Pliki nagłówkowe BioAPI
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	libstdc++-devel
@@ -60,7 +60,7 @@ Pliki nagłówkowe BioAPI.
 
 %package static
 Summary:	Static BioAPI libraries
-Summary(pl.UTF-8):   Statyczne biblioteki BioAPI
+Summary(pl.UTF-8):	Statyczne biblioteki BioAPI
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
@@ -72,7 +72,7 @@ Statyczne biblioteki BioAPI.
 
 %package qt
 Summary:	Sample BioAPI Qt application
-Summary(pl.UTF-8):   Przykładowa aplikacja BioAPI w Qt
+Summary(pl.UTF-8):	Przykładowa aplikacja BioAPI w Qt
 Group:		X11/Applications
 
 %description qt
