@@ -7,14 +7,14 @@
 Summary:	Framework for biometric-based authentication
 Summary(pl.UTF-8):	Szkielet do uwierzytelniania opartego o biometrykę
 Name:		bioapi
-Version:	1.2.2
-Release:	0.3
+Version:	1.2.3
+Release:	0.1
 License:	BSD
 Group:		Applications/Networking
-Source0:	http://www.qrivy.net/~michael/blua/bioapi/%{name}-%{version}.tar.bz2
-# Source0-md5:	924f723895c339552e501999945b7920
+Source0:	http://bioapi-linux.googlecode.com/files/%{name}_%{version}.tar.gz
+# Source0-md5:	9bcfb8505a9e4379aa5012300afd3f8c
 Patch0:		%{name}-c++.patch
-URL:		http://www.qrivy.net/~michael/blua/
+URL:		http://code.google.com/p/bioapi-linux/
 BuildRequires:	libstdc++-devel
 %{?with_qt:BuildRequires:	qt-devel}
 BuildRequires:	xorg-lib-libX11-devel
@@ -82,17 +82,23 @@ Sample BioAPI QT application.
 Przykładowa aplikacja BioAPI w Qt.
 
 %prep
-%setup -q
-%patch0 -p1
+%setup -q -n %{name}-linux
+#%patch0 -p1
 
 %build
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
+%{__automake}
 %configure \
 %if %{with qt}
 	--with-Qt-lib-dir=%{_libdir} \
 %else
 	--with-Qt-dir=no \
 %endif
-	--includedir=%{_includedir}/%{name}
+	--includedir=%{_includedir}/%{name} 
+
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
