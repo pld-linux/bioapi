@@ -13,11 +13,13 @@ License:	BSD
 Group:		Applications/Networking
 Source0:	http://bioapi-linux.googlecode.com/files/%{name}_%{version}.tar.gz
 # Source0-md5:	9bcfb8505a9e4379aa5012300afd3f8c
-Patch0:		%{name}-c++.patch
 URL:		http://code.google.com/p/bioapi-linux/
+BuildRequires:	autoconf >= 2.59
+BuildRequires:	automake >= 1.6
 BuildRequires:	libstdc++-devel
+BuildRequires:	libtool >= 2:1.5
 %{?with_qt:BuildRequires:	qt-devel}
-BuildRequires:	xorg-lib-libX11-devel
+%{?with_qt:BuildRequires:	xorg-lib-libXt-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # to get /var/lib/bioapi instead of /var/bioapi
@@ -49,7 +51,7 @@ International Biometric Group (IBG).
 Summary:	Header files for BioAPI
 Summary(pl.UTF-8):	Pliki nagłówkowe BioAPI
 Group:		Development/Libraries
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Requires:	libstdc++-devel
 
 %description devel
@@ -62,7 +64,7 @@ Pliki nagłówkowe BioAPI.
 Summary:	Static BioAPI libraries
 Summary(pl.UTF-8):	Statyczne biblioteki BioAPI
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static BioAPI libraries.
@@ -74,6 +76,7 @@ Statyczne biblioteki BioAPI.
 Summary:	Sample BioAPI Qt application
 Summary(pl.UTF-8):	Przykładowa aplikacja BioAPI w Qt
 Group:		X11/Applications
+Requires:	%{name} = %{version}-%{release}
 
 %description qt
 Sample BioAPI QT application.
@@ -83,18 +86,17 @@ Przykładowa aplikacja BioAPI w Qt.
 
 %prep
 %setup -q -n %{name}-linux
-#%patch0 -p1
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
 %{__automake}
 %configure \
 %if %{with qt}
 	--with-Qt-lib-dir=%{_libdir} \
 %else
-	--with-Qt-dir=no \
+	--without-Qt-dir \
 %endif
 	--includedir=%{_includedir}/%{name} 
 
@@ -107,7 +109,7 @@ install -d $RPM_BUILD_ROOT{%{_includedir}/%{name},/var/lib/bioapi}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install include/bioapi_util.h include/installdefs.h imports/cdsa/v2_0/inc/cssmtype.h \
+install imports/cdsa/v2_0/inc/cssmtype.h \
         $RPM_BUILD_ROOT%{_includedir}/%{name}
 
 mv $RPM_BUILD_ROOT%{_bindir}/Sample $RPM_BUILD_ROOT%{_bindir}/BioAPI-Sample
