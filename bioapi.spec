@@ -94,6 +94,7 @@ Przykładowa aplikacja BioAPI w Qt.
 %{__automake}
 %configure \
 %if %{with qt}
+	--with-Qt-dir=/usr \
 	--with-Qt-lib-dir=%{_libdir} \
 %else
 	--without-Qt-dir \
