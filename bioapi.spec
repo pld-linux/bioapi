@@ -13,6 +13,10 @@ License:	BSD
 Group:		Applications/Networking
 Source0:	http://bioapi-linux.googlecode.com/files/%{name}_%{version}.tar.gz
 # Source0-md5:	9bcfb8505a9e4379aa5012300afd3f8c
+Patch0:		%{name}-build.patch
+Patch1:		%{name}-enroll-ret.patch
+Patch2:		%{name}-gcc44.patch
+Patch3:		%{name}-no-delete.patch
 URL:		http://code.google.com/p/bioapi-linux/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1.6
@@ -86,6 +90,10 @@ Przykładowa aplikacja BioAPI w Qt.
 
 %prep
 %setup -q -n %{name}-linux
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 %{__libtoolize}
@@ -99,18 +107,17 @@ Przykładowa aplikacja BioAPI w Qt.
 %else
 	--without-Qt-dir \
 %endif
-	--includedir=%{_includedir}/%{name} 
+	--includedir=%{_includedir}/%{name}
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_includedir}/%{name},/var/lib/bioapi}
-
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install imports/cdsa/v2_0/inc/cssmtype.h \
+cp -p imports/cdsa/v2_0/inc/cssmtype.h \
         $RPM_BUILD_ROOT%{_includedir}/%{name}
 
 mv $RPM_BUILD_ROOT%{_bindir}/Sample $RPM_BUILD_ROOT%{_bindir}/BioAPI-Sample
