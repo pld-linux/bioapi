@@ -1,5 +1,5 @@
 # TODO:
-# - change code to do not require *.so libs and use *.so.X.X.X
+# - change code to do not require *.so libs and dlopen by SONAME
 #
 # Conditional build:
 %bcond_without	qt	# don't build qtpwbsp module
@@ -7,24 +7,26 @@
 Summary:	Framework for biometric-based authentication
 Summary(pl.UTF-8):	Szkielet do uwierzytelniania opartego o biometrykę
 Name:		bioapi
-Version:	1.2.3
+Version:	1.2.4
 Release:	0.1
 License:	BSD
 Group:		Applications/Networking
+#Source0Download: http://code.google.com/p/bioapi-linux/downloads/list
 Source0:	http://bioapi-linux.googlecode.com/files/%{name}_%{version}.tar.gz
-# Source0-md5:	9bcfb8505a9e4379aa5012300afd3f8c
+# Source0-md5:	98c20bd7bb2d87f24980c87b6e1c3fb6
 Patch0:		%{name}-build.patch
-Patch1:		%{name}-enroll-ret.patch
-Patch2:		%{name}-gcc44.patch
-Patch3:		%{name}-no-delete.patch
+Patch1:		%{name}-no-delete.patch
 URL:		http://code.google.com/p/bioapi-linux/
-BuildRequires:	autoconf >= 2.59
+BuildRequires:	autoconf >= 2.67
 BuildRequires:	automake >= 1.6
 BuildRequires:	libstdc++-devel
-BuildRequires:	libtool >= 2:1.5
+BuildRequires:	libtool >= 2:2
 %{?with_qt:BuildRequires:	qt-devel}
 %{?with_qt:BuildRequires:	xorg-lib-libXt-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# circular symbol dependencies between libmds_util and libbioapi_mds300
+%define		skip_post_check_so	libmds_util.so.*
 
 # to get /var/lib/bioapi instead of /var/bioapi
 %define		_localstatedir	/var/lib
@@ -92,8 +94,6 @@ Przykładowa aplikacja BioAPI w Qt.
 %setup -q -n %{name}-linux
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 %build
 %{__libtoolize}
@@ -102,8 +102,10 @@ Przykładowa aplikacja BioAPI w Qt.
 %{__automake}
 %configure \
 %if %{with qt}
-	--with-Qt-dir=/usr \
+	--with-Qt-bin-dir=/usr/bin \
+	--with-Qt-include-dir=/usr/include/qt \
 	--with-Qt-lib-dir=%{_libdir} \
+	--with-Qt-lib=qt-mt \
 %else
 	--without-Qt-dir \
 %endif
@@ -130,7 +132,7 @@ mv $RPM_BUILD_ROOT%{_bindir}/QSample $RPM_BUILD_ROOT%{_bindir}/BioAPI-QSample
 %endif
 
 # modules to dlopen
-rm -f $RPM_BUILD_ROOT%{_libdir}/lib{bioapi_dummy100,pwbsp,qtpwbsp}.{la,a}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/lib{bioapi_dummy100,pwbsp,qtpwbsp}.{la,a}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -140,6 +142,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/BioAPI-mds_install -s %{_libdir}
 %{_bindir}/BioAPI-mod_install -fi %{_libdir}/libbioapi100.so
 %{_bindir}/BioAPI-mod_install -fi %{_libdir}/libbioapi_dummy100.so
+%{_bindir}/BioAPI-mod_install -fi %{_libdir}/libpwbsp.so
 
 %postun -p /sbin/ldconfig
 
@@ -156,10 +159,16 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/BioAPI-*_*
 %attr(755,root,root) %{_bindir}/BioAPITest
 %attr(755,root,root) %{_libdir}/libbioapi100.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libbioapi100.so.0
 %attr(755,root,root) %{_libdir}/libbioapi_dummy100.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libbioapi_dummy100.so.0
 %attr(755,root,root) %{_libdir}/libbioapi_mds300.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libbioapi_mds300.so.0
 %attr(755,root,root) %{_libdir}/libmds_util.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libmds_util.so.0
 %attr(755,root,root) %{_libdir}/libpwbsp.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libpwbsp.so.0
+# libraries are dlopened too
 %attr(755,root,root) %{_libdir}/libbioapi100.so
 %attr(755,root,root) %{_libdir}/libbioapi_dummy100.so
 %attr(755,root,root) %{_libdir}/libbioapi_mds300.so
@@ -187,5 +196,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/BioAPI-MdsEdit
 %attr(755,root,root) %{_bindir}/BioAPI-QSample
 %attr(755,root,root) %{_libdir}/libqtpwbsp.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libqtpwbsp.so.0
 %attr(755,root,root) %{_libdir}/libqtpwbsp.so
 %endif
